@@ -2,6 +2,8 @@ import cv2
 import numpy as np
 import pandas as pd
 import argparse
+from sklearn.neighbors import KNeighborsClassifier
+
 
 #Creating argument parser to take image path from command line
 ap = argparse.ArgumentParser()
@@ -20,15 +22,17 @@ r = g = b = xpos = ypos = 0
 index=["color","color_name","hex","R","G","B"]
 csv = pd.read_csv('colors.csv', names=index, header=None)
 
-#function to calculate minimum distance from all colors and get the most matching color
-def getColorName(R,G,B):
-    minimum = 10000
-    for i in range(len(csv)):
-        d = abs(R- int(csv.loc[i,"R"])) + abs(G- int(csv.loc[i,"G"]))+ abs(B- int(csv.loc[i,"B"]))
-        if(d<=minimum):
-            minimum = d
-            cname = csv.loc[i,"color_name"]
-    return cname
+# Train a KNN model on RGB values and color names
+X = csv[['R', 'G', 'B']]
+y = csv['color_name']
+knn = KNeighborsClassifier(n_neighbors=3)
+knn.fit(X, y)
+
+# AI-powered color prediction using KNN
+# We convert the RGB input into a DataFrame with column names to match the training format and avoid sklearn warnings
+def getColorName(R, G, B):
+    input_df = pd.DataFrame([[R, G, B]], columns=['R', 'G', 'B'])
+    return knn.predict(input_df)[0]
 
 #function to get x,y coordinates of mouse double click
 def draw_function(event, x,y,flags,param):
