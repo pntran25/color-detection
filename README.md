@@ -20,14 +20,14 @@ Files Included:
 ---------------
 - color_detection.py : Main script with AI-powered color name prediction.
 - colors.csv         : Dataset with 865 color names and RGB/hex values.
-- colorpic.jpg       : Sample image to test color detection.
+- me.jpg       : Sample image to test color detection.
 
 How to Run:
 -----------
 Use the command line to run the project. Provide the image path using the -i argument.
 
 Example:
-> python color_detection.py -i colorpic.jpg
+> python color_detection.py -i me.jpg
 
 Instructions:
 -------------
